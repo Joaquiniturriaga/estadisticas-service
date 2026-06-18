@@ -11,7 +11,7 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-JWT_SECRET = os.getenv("JWT_SECRET", "cambiame")
+JWT_SECRET = os.getenv("JWT_SECRET", "TEST")
 JWT_ALG = "HS256"
 
 _bearer = HTTPBearer(auto_error=False)

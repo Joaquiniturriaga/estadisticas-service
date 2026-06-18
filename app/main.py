@@ -11,13 +11,11 @@ Prefijo de rutas: /api/estadisticas
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .auth import usuario_actual
-from .db import conexion, dict_cursor, esperar_bd
-
-
+from .db import conexion, dict_cursor, esperar_bd, init_schema, ping
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     esperar_bd()
@@ -46,6 +44,24 @@ app.add_middleware(
 #   - readiness: ¿está listo para recibir tráfico? Debe verificar la BD.
 # Luego configurar livenessProbe/readinessProbe en el Deployment de EKS.
 
+
+@app.get("/livez")
+def livez():
+    """Endpoint de liveness : responde 200 si el proceso está vivo, 500 si no.
+    Kubernetes usará esto para detectar procesos colgados y reiniciarlos.
+    """
+    return {"status" : "alive"}
+
+
+@app.get("/readyz")
+def readyz():
+    """Endpoint de readiness : responde 200 si la BD está lista, 503 si no.
+    Kubernetes usará esto para decidir cuándo enviar tráfico a este servicio.
+    """
+    if ping():
+        return {"status" : "ok"}
+    else:
+        raise HTTPException(status_code=503, detail="BD no disponible")
 
 @app.get("/api/estadisticas/mias")
 def mis_estadisticas(usuario: dict = Depends(usuario_actual)):
