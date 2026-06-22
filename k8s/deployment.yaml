@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: estadisticas-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: estadisticas-service
@@ -19,7 +19,7 @@ spec:
             - containerPort: 8006
           envFrom:
             - secretRef:
-                name: estadisticas-secrets
+                name: casino-secrets
           resources:
             requests:
               cpu: "100m"
@@ -30,12 +30,12 @@ spec:
           readinessProbe:
             httpGet:
               path: /readyz
-              port: 8005
+              port: 8006
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /livez
-              port: 8005
+              port: 8006
             initialDelaySeconds: 10
             periodSeconds: 15

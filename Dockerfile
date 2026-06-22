@@ -38,4 +38,4 @@ USER appuser
 EXPOSE 8006
 
 # Comando de arranque con uvicorn (cámbia el puerto según el servicio)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8002"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8006"]
