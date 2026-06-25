@@ -11,6 +11,7 @@ import psycopg2
 import psycopg2.extras
 import psycopg2.pool
 from psycopg2 import extensions
+from dotenv import load_dotenv
 
 # NUMERIC -> float para respuestas JSON nativas.
 _DEC2FLOAT = extensions.new_type(
@@ -20,12 +21,15 @@ _DEC2FLOAT = extensions.new_type(
 )
 extensions.register_type(_DEC2FLOAT)
 
+load_dotenv()
+
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": int(os.getenv("DB_PORT", "5432")),
     "user": os.getenv("DB_USER", "casino"),
     "password": os.getenv("DB_PASSWORD", "casino"),
     "dbname": os.getenv("DB_NAME", "casino_db"),
+    "client_encoding": "utf8",
 }
 
 _pool: psycopg2.pool.ThreadedConnectionPool | None = None
@@ -80,3 +84,8 @@ def ping() -> bool:
         return True
     except Exception:  # noqa: BLE001
         return False
+
+
+def init_schema() -> None:
+    """Este servicio no crea tablas propias, solo lee de las existentes."""
+    print("[PG] Estadísticas-service: sin esquema propio (solo lectura)", flush=True)

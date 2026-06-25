@@ -1,0 +1,35 @@
+# Entorno virtual de Python
+.venv/
+
+# Archivos compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git
+.git
+.gitignore
+
+# Editores
+.vscode/
+.idea/
+
+# Variables de entorno (nunca al contenedor)
+.env
+.env.*
+
+# Tests
+pytest_cache/
+.coverage
+htmlcov/
+
+# Documentación
+README.md
+
+# El propio Dockerfile no es necesario dentro
+Dockerfile
+
+# Logs
+*.log
+logs/

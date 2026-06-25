@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: estadisticas-service
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: estadisticas-service
+  template:
+    metadata:
+      labels:
+        app: estadisticas-service
+    spec:
+      containers:
+        - name: estadisticas-service
+          image: 883811547490.dkr.ecr.us-east-1.amazonaws.com/estadisticas-service:latest
+          ports:
+            - containerPort: 8006
+          envFrom:
+            - secretRef:
+                name: casino-secrets
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8006
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8006
+            initialDelaySeconds: 10
+            periodSeconds: 15
