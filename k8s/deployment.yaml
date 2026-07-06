@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: estadisticas-service
-          image: 883811547490.dkr.ecr.us-east-1.amazonaws.com/estadisticas-service:latest
+          image: 027067673578.dkr.ecr.us-east-1.amazonaws.com/estadisticas-service:latest
           ports:
             - containerPort: 8006
           envFrom:
